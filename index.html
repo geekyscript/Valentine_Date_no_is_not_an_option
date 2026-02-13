@@ -6,12 +6,36 @@
   <title>Be My Valentine 💘</title>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+  <!-- GLightbox -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css" />
 
   <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
+    :root {
+      --pink-soft: #ff9a9e;
+      --pink-hot: #ff4d6d;
+      --purple-soft: #a18cd1;
+      --lavender: #fbc2eb;
+      --peach: #fad0c4;
+      --cream: #fff9f0;
+      --text-dark: #4a1c2f;
+      --text-medium: #6b4c5a;
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Poppins', sans-serif;
+      --font-handwritten: 'Dancing Script', cursive;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -26,8 +50,16 @@
       background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
       background-size: 400% 400%;
       animation: bgMove 12s ease infinite;
-      font-family: "Poppins", sans-serif;
+      font-family: var(--font-body);
       overflow: hidden;
+    }
+
+    body.experience-mode {
+      display: block;
+      overflow-y: auto;
+      overflow-x: hidden;
+      align-items: initial;
+      justify-content: initial;
     }
 
     @keyframes bgMove {
@@ -36,11 +68,13 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Card */
+    /* ============================================
+       PROPOSAL CARD
+       ============================================ */
     .card {
       width: min(92%, 420px);
       padding: 40px 30px 45px;
-      background: rgba(255, 255, 255, 0.75);
+      background: var(--glass-bg);
       backdrop-filter: blur(18px);
       border-radius: 28px;
       text-align: center;
@@ -49,6 +83,7 @@
         inset 0 0 0 1px rgba(255,255,255,0.4);
       position: relative;
       animation: cardIn 1.1s ease;
+      z-index: 10;
     }
 
     @keyframes cardIn {
@@ -56,7 +91,17 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Glow ring */
+    .card--exit {
+      animation: cardExit 700ms ease forwards;
+    }
+
+    @keyframes cardExit {
+      to {
+        opacity: 0;
+        transform: translateY(-40px) scale(0.85);
+      }
+    }
+
     .card::before {
       content: "";
       position: absolute;
@@ -81,10 +126,10 @@
       75% { transform: scale(1.12); }
     }
 
-    h2 {
-      font-family: "Playfair Display", serif;
+    .card h2 {
+      font-family: var(--font-display);
       font-size: 28px;
-      color: #4a1c2f;
+      color: var(--text-dark);
       margin-bottom: 30px;
       line-height: 1.35;
     }
@@ -94,7 +139,7 @@
       height: 78px;
     }
 
-    button {
+    .card button {
       position: absolute;
       padding: 14px 36px;
       border-radius: 40px;
@@ -104,9 +149,10 @@
       cursor: pointer;
       transition: all 0.25s ease;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      font-family: var(--font-body);
     }
 
-    button:active {
+    .card button:active {
       transform: scale(0.94);
     }
 
@@ -135,13 +181,16 @@
       font-style: italic;
     }
 
-    /* Floating depth hearts */
+    /* ============================================
+       FLOATING HEARTS (background)
+       ============================================ */
     .heart {
-      position: absolute;
+      position: fixed;
       bottom: -20px;
       animation: floatUp linear forwards;
       pointer-events: none;
       filter: blur(0.3px);
+      z-index: 0;
     }
 
     @keyframes floatUp {
@@ -155,43 +204,659 @@
       }
     }
 
-    /* Responsive */
+    /* ============================================
+       EXPERIENCE WRAPPER
+       ============================================ */
+    .experience {
+      display: none;
+      opacity: 0;
+      width: 100%;
+    }
+
+    .experience--active {
+      display: block;
+      animation: experienceIn 1200ms ease forwards;
+    }
+
+    @keyframes experienceIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       SHARED SECTION STYLES
+       ============================================ */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 5vw, 42px);
+      color: var(--text-dark);
+      text-align: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .section-subtitle {
+      font-family: var(--font-handwritten);
+      font-size: clamp(18px, 3vw, 24px);
+      color: var(--text-medium);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-divider {
+      text-align: center;
+      font-size: 20px;
+      margin: 0 auto 30px;
+      letter-spacing: 8px;
+    }
+
+    /* ============================================
+       SECTION: HERO
+       ============================================ */
+    .section-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 8vw, 64px);
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      margin-bottom: 12px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-handwritten);
+      font-size: clamp(20px, 4vw, 32px);
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .hero-heart-divider {
+      font-size: 32px;
+      animation: heartbeat 1.8s infinite;
+    }
+
+    .hero-photo-frame {
+      width: min(85%, 450px);
+      border-radius: 24px;
+      overflow: hidden;
+      border: 6px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      transform: rotate(-2deg);
+      transition: transform 0.4s ease;
+    }
+
+    .hero-photo-frame:hover {
+      transform: rotate(0deg) scale(1.02);
+    }
+
+    .hero-main-photo {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--lavender), var(--peach));
+    }
+
+    /* ============================================
+       SECTION: CAROUSEL (Swiper)
+       ============================================ */
+    .section-carousel {
+      padding: 80px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-swiper {
+      padding: 40px 0 60px;
+      overflow: visible;
+    }
+
+    .hero-swiper .swiper-slide {
+      width: 320px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .hero-swiper .swiper-slide img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, var(--lavender), var(--peach));
+    }
+
+    .slide-caption {
+      font-family: var(--font-handwritten);
+      font-size: 18px;
+      color: var(--text-medium);
+      text-align: center;
+      padding: 16px 12px;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--pink-hot) !important;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      color: var(--pink-hot) !important;
+    }
+
+    .swiper-button-prev::after,
+    .swiper-button-next::after {
+      font-size: 24px !important;
+    }
+
+    /* ============================================
+       SECTION: POLAROID GRID
+       ============================================ */
+    .section-memories {
+      padding: 80px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .polaroid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .polaroid {
+      background: white;
+      padding: 12px 12px 44px 12px;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transform: rotate(var(--rotate, 0deg));
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .polaroid:hover {
+      transform: rotate(0deg) translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+
+    .polaroid a {
+      display: block;
+    }
+
+    .polaroid img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 2px;
+      display: block;
+      background: linear-gradient(135deg, var(--lavender), var(--peach));
+    }
+
+    .polaroid-caption {
+      font-family: var(--font-handwritten);
+      font-size: 17px;
+      color: var(--text-medium);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ============================================
+       SECTION: LOVE LETTER
+       ============================================ */
+    .section-letter {
+      padding: 80px 20px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .letter-container {
+      max-width: 600px;
+      width: 100%;
+      background: var(--cream);
+      border-radius: 8px;
+      padding: 50px 40px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+      position: relative;
+      border: 1px solid rgba(200,170,140,0.3);
+    }
+
+    .letter-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(
+          transparent,
+          transparent 31px,
+          rgba(200,170,140,0.15) 31px,
+          rgba(200,170,140,0.15) 32px
+        );
+      pointer-events: none;
+      border-radius: 8px;
+    }
+
+    .letter-decoration {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .letter-title {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 5vw, 34px);
+      color: var(--text-dark);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .letter-body {
+      font-family: var(--font-handwritten);
+      font-size: 20px;
+      color: var(--text-dark);
+      line-height: 2;
+    }
+
+    .letter-body p {
+      margin-bottom: 16px;
+    }
+
+    .letter-signature {
+      margin-top: 24px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .section-footer {
+      padding: 60px 20px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-hearts {
+      font-size: 28px;
+      letter-spacing: 12px;
+      margin-bottom: 16px;
+      animation: heartbeat 1.8s infinite;
+    }
+
+    .footer-text {
+      font-family: var(--font-handwritten);
+      font-size: 20px;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 8px;
+    }
+
+    .footer-year {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ============================================
+       MUSIC TOGGLE
+       ============================================ */
+    .music-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      z-index: 100;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: none;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+    }
+
+    .music-btn.playing {
+      animation: musicPulse 1.5s ease infinite;
+    }
+
+    @keyframes musicPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(255,77,109,0.3); }
+      50% { box-shadow: 0 4px 30px rgba(255,77,109,0.6); }
+    }
+
+    /* ============================================
+       SPARKLE CURSOR
+       ============================================ */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      font-size: 14px;
+      animation: sparkleAnim 800ms ease forwards;
+      z-index: 9999;
+    }
+
+    @keyframes sparkleAnim {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.3) translateY(-30px); }
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 768px) {
+      .hero-swiper .swiper-slide {
+        width: 260px;
+      }
+
+      .hero-swiper .swiper-slide img {
+        height: 220px;
+      }
+
+      .polaroid-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 0 10px;
+      }
+
+      .letter-container {
+        padding: 36px 28px;
+      }
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        display: none;
+      }
+    }
+
     @media (max-width: 480px) {
-      h2 { font-size: 23px; }
+      .card h2 { font-size: 23px; }
       .emoji { font-size: 58px; }
-      button { padding: 12px 28px; font-size: 15px; }
+      .card button { padding: 12px 28px; font-size: 15px; }
       #yes { left: 8%; }
       #no { left: 55%; }
+
+      .hero-swiper .swiper-slide {
+        width: 85vw;
+      }
+
+      .polaroid-grid {
+        grid-template-columns: 1fr;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .letter-body {
+        font-size: 18px;
+      }
+
+      .letter-container {
+        padding: 28px 20px;
+      }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- ============================================
+       PROPOSAL CARD (existing)
+       ============================================ -->
   <div class="card">
-    <div class="emoji">🐱❤️</div>
-    <h2>Aditi,<br>will you be my Valentine?</h2>
+    <div class="emoji">❤️🪺 </div>
+    <h2>Kiki ❤️,<br>will you be my Valentine?</h2>
 
     <div class="buttons">
       <button id="yes">Yes 💖</button>
       <button id="no">No 🙈</button>
     </div>
 
-    <div class="hint">Some love stories don’t allow “no” ✨</div>
+    <div class="hint">Some love stories don't allow "no" ✨</div>
   </div>
+
+  <!-- ============================================
+       VALENTINE'S EXPERIENCE (hidden until Yes)
+       ============================================ -->
+  <div id="valentine-experience" class="experience">
+
+    <!-- HERO -->
+    <section class="section-hero">
+      <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
+        <h1 class="hero-title">Our Love Story</h1>
+        <p class="hero-subtitle">Every moment with you is a gift</p>
+        <div class="hero-heart-divider">💕</div>
+      </div>
+      <div class="hero-photo-frame" data-aos="zoom-in" data-aos-delay="400">
+        <!-- Replace src with your main couple photo -->
+        <img src="photos/hero-1.jpg" alt="Us together" class="hero-main-photo" />
+      </div>
+    </section>
+
+    <!-- PHOTO CAROUSEL -->
+    <section class="section-carousel">
+      <h2 class="section-title" data-aos="fade-up">Our Favorite Moments</h2>
+      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">💗 💗 💗</div>
+
+      <div class="swiper hero-swiper" data-aos="fade-up" data-aos-delay="200">
+        <div class="swiper-wrapper">
+          <!-- Slide 1 -->
+          <div class="swiper-slide">
+            <a href="photos/hero-1.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Our first memory together">
+              <img src="photos/hero-1.jpg" alt="Memory 1" loading="lazy" />
+            </a>
+            <p class="slide-caption">Our first memory together</p>
+          </div>
+          <!-- Slide 2 -->
+          <div class="swiper-slide">
+            <a href="photos/hero-2.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Adventures with you">
+              <img src="photos/hero-2.jpg" alt="Memory 2" loading="lazy" />
+            </a>
+            <p class="slide-caption">Adventures with you</p>
+          </div>
+          <!-- Slide 3 -->
+          <div class="swiper-slide">
+            <a href="photos/hero-3.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Laughing together">
+              <img src="photos/hero-3.jpg" alt="Memory 3" loading="lazy" />
+            </a>
+            <p class="slide-caption">Laughing together</p>
+          </div>
+          <!-- Slide 4 -->
+          <div class="swiper-slide">
+            <a href="photos/hero-4.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Date night">
+              <img src="photos/hero-4.jpg" alt="Memory 4" loading="lazy" />
+            </a>
+            <p class="slide-caption">Date night</p>
+          </div>
+          <!-- Slide 5 -->
+          <div class="swiper-slide">
+            <a href="photos/hero-5.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: My favorite view">
+              <img src="photos/hero-5.jpg" alt="Memory 5" loading="lazy" />
+            </a>
+            <p class="slide-caption">My favorite view</p>
+          </div>
+          <!-- Slide 6 -->
+          <div class="swiper-slide">
+            <a href="photos/hero-6.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Together always">
+              <img src="photos/hero-6.jpg" alt="Memory 6" loading="lazy" />
+            </a>
+            <p class="slide-caption">Together always</p>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </section>
+
+    <!-- POLAROID PHOTO GRID -->
+    <section class="section-memories">
+      <h2 class="section-title" data-aos="fade-up">Memories I Treasure</h2>
+      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">💖 💖 💖</div>
+
+      <div class="polaroid-grid">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: -3deg;">
+          <a href="photos/memory-01.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: A beautiful day">
+            <img src="photos/memory-01.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">A beautiful day</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: 2deg;">
+          <a href="photos/memory-02.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Coffee dates">
+            <img src="photos/memory-02.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Coffee dates</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: -1deg;">
+          <a href="photos/memory-03.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Silly moments">
+            <img src="photos/memory-03.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Silly moments</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: 3deg;">
+          <a href="photos/memory-04.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: You and me">
+            <img src="photos/memory-04.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">You and me</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: 2deg;">
+          <a href="photos/memory-05.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Weekend vibes">
+            <img src="photos/memory-05.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Weekend vibes</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: -2deg;">
+          <a href="photos/memory-06.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: My happy place">
+            <img src="photos/memory-06.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">My happy place</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: 1deg;">
+          <a href="photos/memory-07.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Always smiling">
+            <img src="photos/memory-07.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Always smiling</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: -3deg;">
+          <a href="photos/memory-08.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Love this one">
+            <img src="photos/memory-08.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Love this one</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: -1deg;">
+          <a href="photos/memory-09.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Best day ever">
+            <img src="photos/memory-09.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Best day ever</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: 2deg;">
+          <a href="photos/memory-10.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Perfect moment">
+            <img src="photos/memory-10.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Perfect moment</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: -2deg;">
+          <a href="photos/memory-11.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Can't stop smiling">
+            <img src="photos/memory-11.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Can't stop smiling</p>
+        </div>
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: 1deg;">
+          <a href="photos/memory-12.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Forever grateful">
+            <img src="photos/memory-12.jpg" alt="Memory" loading="lazy" />
+          </a>
+          <p class="polaroid-caption">Forever grateful</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOVE LETTER -->
+    <section class="section-letter">
+      <div class="letter-container" data-aos="fade-up" data-aos-duration="1500">
+        <div class="letter-decoration">💌</div>
+        <h2 class="letter-title">A Letter For You</h2>
+        <div class="letter-body">
+          <p>Dear Kiki,</p>
+          <p>Write your personal love letter here. Tell her how much she means to you, share your favorite memories, and let her know why she's the one.</p>
+          <p>Every day with you is an adventure, and I wouldn't trade a single moment. You make everything brighter just by being you.</p>
+          <p>Here's to us, to every laugh, every late-night talk, and every little thing that makes us... us.</p>
+          <p class="letter-signature">With all my love,<br/>Forever Yours 💕</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="section-footer">
+      <div class="footer-hearts">💕 💗 💕</div>
+      <p class="footer-text">Made with love for my Kiki</p>
+      <p class="footer-year">Valentine's Day 2026</p>
+    </footer>
+
+  </div>
+
+  <!-- MUSIC TOGGLE -->
+  <button id="music-toggle" class="music-btn" aria-label="Toggle music">🎵</button>
+  <!-- Replace the src below with your own romantic song file, e.g. "music/song.mp3" -->
+  <audio id="bgMusic" loop preload="none">
+    <source src="music/romantic-song.mp3" type="audio/mpeg" />
+  </audio>
 
   <!-- Sounds -->
   <audio id="hoverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"></audio>
   <audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
 
+  <!-- Libraries (loaded at end for performance) -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
+
   <script>
+    /* ============================================
+       PROPOSAL CARD LOGIC
+       ============================================ */
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
     const card = document.querySelector(".card");
     const hoverSound = document.getElementById("hoverSound");
     const yesSound = document.getElementById("yesSound");
 
-    noBtn.addEventListener("mouseenter", () => {
+    // No button evasion (mouse)
+    noBtn.addEventListener("mouseenter", evadeNo);
+    // No button evasion (touch)
+    noBtn.addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      evadeNo();
+    });
+
+    function evadeNo() {
       hoverSound.currentTime = 0;
       hoverSound.play();
 
@@ -203,22 +868,158 @@
 
       noBtn.style.left = Math.random() * maxX + "px";
       noBtn.style.top = Math.random() * maxY + "px";
-    });
+    }
 
+    /* ============================================
+       YES BUTTON → TRANSITION
+       ============================================ */
     yesBtn.addEventListener("click", () => {
       yesSound.play();
 
+      // Confetti burst 1
       confetti({
         particleCount: 260,
         spread: 120,
         origin: { y: 0.65 }
       });
 
+      // Confetti burst 2
       setTimeout(() => {
-        alert("YAY 💕 I can’t wait for Valentine’s Day with you!");
-      }, 500);
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.5 }
+        });
+      }, 300);
+
+      // Begin card exit
+      setTimeout(() => {
+        card.classList.add("card--exit");
+      }, 800);
+
+      // Switch to experience mode
+      setTimeout(() => {
+        card.style.display = "none";
+        document.body.classList.add("experience-mode");
+
+        const experience = document.getElementById("valentine-experience");
+        experience.style.display = "block";
+
+        // Force reflow, then animate in
+        experience.offsetHeight;
+        experience.classList.add("experience--active");
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: "instant" });
+
+        // Initialize libraries
+        initSwiper();
+        initAOS();
+        initGLightbox();
+        initSparkles();
+        initMusicToggle();
+      }, 1500);
     });
 
+    /* ============================================
+       SWIPER INITIALIZATION
+       ============================================ */
+    function initSwiper() {
+      new Swiper(".hero-swiper", {
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        loop: true,
+        coverflowEffect: {
+          rotate: 8,
+          stretch: 0,
+          depth: 120,
+          modifier: 1,
+          slideShadows: true
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: true
+        }
+      });
+    }
+
+    /* ============================================
+       AOS INITIALIZATION
+       ============================================ */
+    function initAOS() {
+      AOS.init({
+        duration: 800,
+        easing: "ease-out-cubic",
+        once: true,
+        offset: 80
+      });
+    }
+
+    /* ============================================
+       GLIGHTBOX INITIALIZATION
+       ============================================ */
+    function initGLightbox() {
+      GLightbox({
+        touchNavigation: true,
+        loop: true,
+        closeOnOutsideClick: true
+      });
+    }
+
+    /* ============================================
+       SPARKLE CURSOR TRAIL
+       ============================================ */
+    function initSparkles() {
+      const sparkleEmojis = ["✨", "💖", "⭐", "💗"];
+      document.addEventListener("mousemove", (e) => {
+        if (Math.random() > 0.3) return;
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+        sparkle.style.left = e.clientX + "px";
+        sparkle.style.top = e.clientY + "px";
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 800);
+      });
+    }
+
+    /* ============================================
+       MUSIC TOGGLE
+       ============================================ */
+    function initMusicToggle() {
+      const musicBtn = document.getElementById("music-toggle");
+      const bgMusic = document.getElementById("bgMusic");
+      bgMusic.volume = 0.3;
+
+      // Show the button
+      musicBtn.style.display = "block";
+
+      musicBtn.addEventListener("click", () => {
+        if (bgMusic.paused) {
+          bgMusic.play().catch(() => {});
+          musicBtn.textContent = "🎵";
+          musicBtn.classList.add("playing");
+        } else {
+          bgMusic.pause();
+          musicBtn.textContent = "🔇";
+          musicBtn.classList.remove("playing");
+        }
+      });
+    }
+
+    /* ============================================
+       FLOATING HEARTS (background)
+       ============================================ */
     function createHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
