@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Be My Valentine 💘</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Surprise for Aditi 💖</title>
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap"
+    rel="stylesheet">
   <!-- Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+  <!-- Preload Assets -->
+  <link rel="preload" as="image" href="images/FreeFire_02_14_2026 22_12_25.png">
+  <link rel="preload" as="image" href="images/Screenshot_20260214_214741.jpg.jpeg">
+  <link rel="preload" as="image" href="images/same note.jpeg">
   <style>
+    /* --- Global Styles --- */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -20,23 +27,366 @@
 
     body {
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-family: "Poppins", sans-serif;
       background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
       background-size: 400% 400%;
       animation: bgMove 12s ease infinite;
-      font-family: "Poppins", sans-serif;
       overflow: hidden;
+      /* STRICTLY Prevent scroll */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #4a1c2f;
+      position: relative;
+      /* For hearts positioning */
     }
 
     @keyframes bgMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
-    /* Card */
+    /* --- Hidden Class --- */
+    .hidden {
+      display: none !important;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      to {
+        opacity: 0;
+        transform: scale(1.05);
+      }
+    }
+
+    /* --- Container for All Phases --- */
+    #app {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* --- 1. LOGIN PHASE --- */
+    #login-phase {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    #login-phase h2 {
+      margin-bottom: 20px;
+      font-family: "Playfair Display", serif;
+    }
+
+    #password-input {
+      padding: 12px 20px;
+      border-radius: 25px;
+      border: 2px solid #fff;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 16px;
+      outline: none;
+      width: 200px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    #password-input:focus {
+      border-color: #ff4d6d;
+      width: 220px;
+    }
+
+    #login-btn {
+      margin-top: 15px;
+      padding: 10px 30px;
+      border-radius: 25px;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: transform 0.2s;
+    }
+
+    #login-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* --- 2. STORY PHASE --- */
+    #story-phase {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .story-slide {
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      display: none;
+      animation: slideIn 0.8s ease;
+    }
+
+    .story-slide.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .story-nav {
+      margin-top: 20px;
+    }
+
+    .next-btn {
+      background: #4a1c2f;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    /* --- 3. GALLERY PHASE --- */
+    #gallery-phase {
+      width: 100%;
+      height: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+      /* Allow scrolling */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #gallery-phase h2 {
+      margin-bottom: 30px;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+      padding-bottom: 100px;
+      /* Space for next button */
+    }
+
+    .gallery-item {
+      background: white;
+      padding: 10px 10px 40px 10px;
+      /* Polaroid style */
+      border-radius: 4px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transform: rotate(var(--rot));
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.05) rotate(0deg);
+      z-index: 10;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 200px;
+      /* Uniform height for now, object-fit cover */
+      object-fit: cover;
+      border-radius: 2px;
+      background: #eee;
+    }
+
+    .gallery-item p {
+      margin-top: 10px;
+      font-family: "Shadows Into Light", cursive;
+      /* Handwriting font could be added */
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .to-final-btn {
+      margin-top: 40px;
+      padding: 15px 40px;
+      background: #fff;
+      color: #ff4d6d;
+      font-family: "Playfair Display", serif;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+
+    .to-final-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* --- 5. VIDEO MODAL --- */
+    #video-modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      /* Increased opacity */
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #video-modal.show {
+      display: flex;
+      /* Show when active */
+      opacity: 1;
+    }
+
+    .video-container {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      padding: 15px;
+      /* Less padding */
+      background: rgba(255, 255, 255, 0.9);
+      /* More opaque */
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      /* Ensure it fits vertically */
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #video-modal.show .video-container {
+      transform: scale(1);
+    }
+
+    #memory-video {
+      width: 100%;
+      /* Fill width */
+      height: auto;
+      /* Maintain aspect ratio */
+      max-height: 80vh;
+      /* Don't be taller than screen */
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-video-btn {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 40px;
+      height: 40px;
+      background: #ff4d6d;
+      color: white;
+      border: 2px solid white;
+      /* Make it pop */
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s;
+      z-index: 2;
+      /* Ensure on top */
+    }
+
+    .close-video-btn:hover {
+      transform: scale(1.1);
+      background: #ff758f;
+    }
+
+    /* --- 4. PROPOSAL PHASE (Original Card) --- */
+    #proposal-phase {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+
     .card {
       width: min(92%, 420px);
       padding: 40px 30px 45px;
@@ -44,16 +394,9 @@
       backdrop-filter: blur(18px);
       border-radius: 28px;
       text-align: center;
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.25),
-        inset 0 0 0 1px rgba(255,255,255,0.4);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
       position: relative;
       animation: cardIn 1.1s ease;
-    }
-
-    @keyframes cardIn {
-      from { opacity: 0; transform: translateY(30px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     /* Glow ring */
@@ -75,13 +418,26 @@
     }
 
     @keyframes heartbeat {
-      0%,100% { transform: scale(1); }
-      25% { transform: scale(1.08); }
-      50% { transform: scale(1); }
-      75% { transform: scale(1.12); }
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      25% {
+        transform: scale(1.08);
+      }
+
+      50% {
+        transform: scale(1);
+      }
+
+      75% {
+        transform: scale(1.12);
+      }
     }
 
-    h2 {
+    h2.proposal-text {
       font-family: "Playfair Display", serif;
       font-size: 28px;
       color: #4a1c2f;
@@ -94,7 +450,7 @@
       height: 78px;
     }
 
-    button {
+    .proposal-btn {
       position: absolute;
       padding: 14px 36px;
       border-radius: 40px;
@@ -103,10 +459,10 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
-    button:active {
+    .proposal-btn:active {
       transform: scale(0.94);
     }
 
@@ -114,17 +470,17 @@
       left: 12%;
       background: linear-gradient(135deg, #ff4d6d, #ff758f);
       color: #fff;
-      box-shadow: 0 15px 35px rgba(255,77,109,0.55);
+      box-shadow: 0 15px 35px rgba(255, 77, 109, 0.55);
     }
 
     #yes:hover {
       transform: translateY(-3px);
-      box-shadow: 0 20px 40px rgba(255,77,109,0.7);
+      box-shadow: 0 20px 40px rgba(255, 77, 109, 0.7);
     }
 
     #no {
       left: 55%;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255, 255, 255, 0.9);
       color: #777;
     }
 
@@ -135,13 +491,15 @@
       font-style: italic;
     }
 
-    /* Floating depth hearts */
+    /* Floating hearts */
     .heart {
-      position: absolute;
-      bottom: -20px;
+      position: fixed;
+      /* Fixed instead of absolute to stay in viewport */
+      bottom: -10vh;
       animation: floatUp linear forwards;
       pointer-events: none;
       filter: blur(0.3px);
+      z-index: 0;
     }
 
     @keyframes floatUp {
@@ -149,57 +507,596 @@
         transform: translateY(0) scale(1);
         opacity: 1;
       }
+
       to {
         transform: translateY(-120vh) scale(1.8);
         opacity: 0;
       }
     }
 
-    /* Responsive */
+    /* --- CUSTOM GIFT BOX PLACEHOLDER --- */
+    .gift-box-placeholder {
+      width: 100%;
+      height: 200px;
+      /* Same as other images */
+      background: linear-gradient(135deg, #ff9a9e, #fbc2eb);
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gift-box-placeholder::before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 1;
+    }
+
+    .gift-box-placeholder::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 1;
+    }
+
+    .gift-emoji {
+      font-size: 50px;
+      z-index: 2;
+      animation: pulse 2s infinite;
+    }
+
+    .gift-text {
+      font-family: "Poppins", sans-serif;
+      font-size: 14px;
+      color: white;
+      font-weight: 500;
+      margin-top: 5px;
+      z-index: 2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* --- CUSTOM GIFT BOX PLACEHOLDER --- */
+    .gift-box-placeholder {
+      width: 100%;
+      height: 200px;
+      /* Same as other images */
+      background: linear-gradient(135deg, #ff9a9e, #fbc2eb);
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gift-box-placeholder::before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 1;
+    }
+
+    .gift-box-placeholder::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 1;
+    }
+
+    .gift-emoji {
+      font-size: 50px;
+      z-index: 2;
+      animation: pulse 2s infinite;
+    }
+
+    .gift-text {
+      font-family: "Poppins", sans-serif;
+      font-size: 14px;
+      color: white;
+      font-weight: 500;
+      margin-top: 5px;
+      z-index: 2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* --- SUCCESS MESSAGE --- */
+    .success-message {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .success-message .emoji {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: heartbeat 0.6s infinite;
+      /* Faster heartbeat */
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .tenor-gif-embed {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      /* More spacing */
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .cat-gif {
+      width: 100%;
+      height: 150px;
+      /* Fixed height for uniformity */
+      object-fit: cover;
+      /* Crop to fill square */
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+      background: #fff;
+    }
+
+    .cat-gif:hover {
+      transform: scale(1.05);
+      /* Cute hover effect */
+    }
+
+    /* --- MEDIA QUERIES --- */
+    /* Tablet (max-width: 768px) */
+    @media (max-width: 768px) {
+      #story-phase {
+        padding: 20px;
+      }
+
+      .story-slide {
+        padding: 30px 20px;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      .card {
+        padding: 30px 20px;
+      }
+
+      .emoji {
+        font-size: 50px;
+      }
+
+      h2.proposal-text {
+        font-size: 22px;
+      }
+
+      .proposal-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+      }
+
+      .video-container {
+        width: 95%;
+        padding: 10px;
+      }
+    }
+
+    /* Mobile (max-width: 480px) */
     @media (max-width: 480px) {
-      h2 { font-size: 23px; }
-      .emoji { font-size: 58px; }
-      button { padding: 12px 28px; font-size: 15px; }
-      #yes { left: 8%; }
-      #no { left: 55%; }
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      #login-phase {
+        padding: 30px 20px;
+        width: 90%;
+      }
+
+      #password-input {
+        width: 100%;
+      }
+
+      #password-input:focus {
+        width: 100%;
+      }
+
+      .story-slide h2 {
+        font-size: 1.6rem;
+      }
+
+      .story-slide p {
+        font-size: 0.95rem;
+      }
+
+      #gallery-phase h2 {
+        font-size: 2rem;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* Force single column */
+      .gallery-item img {
+        height: auto;
+      }
+
+      /* Let height adjust ratio */
+
+      .card {
+        width: 95%;
+        padding: 25px 15px;
+      }
+
+      h2.proposal-text {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .emoji {
+        font-size: 40px;
+      }
+
+      .buttons {
+        height: 60px;
+      }
+
+      .proposal-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+      }
+
+      #yes {
+        left: 5%;
+      }
+
+      #no {
+        left: 55%;
+      }
+
+      .to-final-btn {
+        font-size: 1rem;
+        padding: 12px 30px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <div class="emoji">🐱❤️</div>
-    <h2>Aditi,<br>will you be my Valentine?</h2>
-
-    <div class="buttons">
-      <button id="yes">Yes 💖</button>
-      <button id="no">No 🙈</button>
+  <div id="app">
+    <!-- PHASE 1: LOGIN -->
+    <div id="login-phase">
+      <h2>Love Login 💖</h2>
+      <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Enter your special date (DDMM)</p>
+      <input type="password" id="password-input" placeholder="e.g. 0410" />
+      <br>
+      <button id="login-btn">Unlock ❤️</button>
+      <div id="login-error" style="color: red; font-size: 0.8rem; margin-top: 10px; display: none;">Wrong date, try
+        again! hint: 0410</div>
     </div>
 
-    <div class="hint">Some love stories don’t allow “no” ✨</div>
-  </div>
+    <!-- PHASE 2: STORY -->
+    <div id="story-phase" class="hidden">
+      <!-- Slide 1 -->
+      <div class="story-slide active">
+        <h2>It started with a game... 🎮</h2>
+        <p style="margin-top: 15px; line-height: 1.6;">Remember our first Free Fire match? <br>I had to leave because my
+          friends came online...<br>"Main baad mein khelunga aap ke sath." 🙈</p>
+        <div class="story-nav"><button class="next-btn" onclick="nextSlide()">Next &rarr;</button></div>
+      </div>
+      <!-- Slide 2 -->
+      <div class="story-slide">
+        <h2>You were so formal! 🇬🇧</h2>
+        <p style="margin-top: 15px; line-height: 1.6;">Speaking in English, all polite and proper.<br>I was just trying
+          to keep up! 😅</p>
+        <div class="story-nav"><button class="next-btn" onclick="nextSlide()">Next &rarr;</button></div>
+      </div>
+      <!-- Slide 3 -->
+      <div class="story-slide">
+        <h2>The Wait... ⏳</h2>
+        <p style="margin-top: 15px; line-height: 1.6;">I desperately wanted your Insta ID.<br>But you said, "Let's wait
+          2-3 days... if I think so, I'll give it."<br>Those were the longest days of my life! 😂</p>
+        <div class="story-nav">
+          <button class="next-btn" onclick="nextSlide()">Next &rarr;</button>
+        </div>
+      </div>
+      <!-- Slide 4 -->
+      <div class="story-slide">
+        <h2>But it was worth it. ❤️</h2>
+        <p style="margin-top: 15px; line-height: 1.6;">From that game to this moment right now.<br>Here are some of my
+          favorite memories with you...</p>
+        <div class="story-nav"><button class="next-btn" onclick="goToGallery()">See Memories &rarr;</button></div>
+      </div>
+    </div>
+
+    <!-- PHASE 3: GALLERY -->
+    <div id="gallery-phase" class="hidden">
+      <h2>Our Moments 📸</h2>
+      <!-- Masonry Grid -->
+      <div class="gallery-grid">
+        <!-- Item 1: First Meeting -->
+        <div class="gallery-item" style="--rot: -2deg">
+          <img src="images/Screenshot_20260214_214741.jpg.jpeg" alt="First Meeting">
+          <p>Remember our first meeting! 😁</p>
+        </div>
+
+        <!-- Item 2: Insta Handle -->
+        <div class="gallery-item" style="--rot: 3deg">
+          <img src="images/FreeFire_02_14_2026 22_12_25.png" alt="Free Fire Chat">
+          <p>Remember how I got your Insta Handle! 😘</p>
+        </div>
+
+        <!-- Item 3: Shared Note (Triggers Video) -->
+        <div class="gallery-item" style="--rot: -1deg" onclick="openVideoModal()">
+          <div class="gift-box-placeholder">
+            <div class="gift-emoji">🎁</div>
+            <div class="gift-text">Open Me!</div>
+          </div>
+          <p>The Very first time i listen to your adorable voice with that KK song "Man Mera" uff.🤍🤌<br><span
+              style="font-size:0.9em; color:#ff4d6d;">(Click to watch memory 🎥)</span></p>
+        </div>
+        <!-- Item 4: Shared Note (Triggers Video) -->
+        <div class="gallery-item" style="--rot: -1deg">
+          <img src="images/same note.jpeg" alt="Shared Note">
+          <p>We shared same note on our stories i still remember it like it was yesterday.😭🤍</p>
+        </div>
+      </div>
+
+      <button class="to-final-btn" onclick="goToProposal()">One last thing... 💌</button>
+    </div>
+
+    <!-- PHASE 4: PROPOSAL -->
+    <div id="proposal-phase" class="hidden">
+      <div class="card">
+        <div class="emoji">🐱❤️</div>
+        <h2 class="proposal-text">Annu (shreyu/shreya),<br>will you be my Parvati/sita/radha/my everything?</h2>
+        <div class="buttons">
+          <button class="proposal-btn" id="yes">Yes 💖</button>
+          <button class="proposal-btn" id="no">No 🙈</button>
+        </div>
+        <div class="hint">Some love stories don’t allow “no” ✨</div>
+
+        <!-- Success Message (Hidden initially) -->
+        <div class="success-message">
+          <div class="emoji">💖</div>
+          <h2 class="proposal-text" style="margin-bottom: 10px;">I Knew It!</h2>
+          <p style="font-size: 1.2rem; color: #666; font-family: 'Poppins', sans-serif;">Let me solve all of your
+            problems ❤️</p>
+
+          <!-- Cat GIF Grid -->
+          <div class="cat-grid">
+            <img class="cat-gif" src="https://media.tenor.com/X-1lU8gQy14AAAAM/cat-dancing-gif-dancing-cat.gif"
+              alt="Dancing Cat">
+            <img class="cat-gif" src="https://media.tenor.com/_u1wIVpTqKkAAAAM/kucing-joget-joget-dance-cat.gif"
+              alt="Funny Cat">
+            <img class="cat-gif" src="https://media.tenor.com/y1m4y_L1j80AAAAM/cat-cute-cat.gif" alt="Cute Cat">
+            <img class="cat-gif" src="https://media.tenor.com/u1t2j9Z0tLAAAAAM/hai-gif.gif" alt="Waving Cat">
+          </div>
+          <!-- No more embed scripts! -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEO MODAL -->
+    <div id="video-modal">
+      <div class="video-container">
+        <button class="close-video-btn" onclick="closeVideoModal()">&times;</button>
+        <video id="memory-video" controls>
+          <source src="images/audio.mp4" type="video/mp4">
+          <!-- Replace with your actual video file -->
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+  </div> <!-- End #app -->
 
   <!-- Sounds -->
-  <audio id="hoverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"></audio>
-  <audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+  <audio id="hoverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"
+    preload="auto"></audio>
+  <audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"
+    preload="auto"></audio>
 
   <script>
+    // --- PERFORMANCE PRELOADER ---
+    window.addEventListener('load', () => {
+      const imagesToPreload = [
+        'images/FreeFire_02_14_2026 22_12_25.png',
+        'images/Screenshot_20260214_214741.jpg.jpeg',
+        'images/same note.jpeg'
+      ];
+
+      const audioToPreload = [
+        'https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3',
+        'https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3'
+      ];
+
+      // Preload Images
+      imagesToPreload.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+
+      // Preload Audio
+      audioToPreload.forEach(src => {
+        const audio = new Audio();
+        audio.src = src;
+        audio.preload = 'auto';
+      });
+    });
+    // --- CONFIG ---
+    const SECRET_Pass = "0410";
+
+    // --- DOM ELEMENTS ---
+    const loginPhase = document.getElementById('login-phase');
+    const storyPhase = document.getElementById('story-phase');
+    const galleryPhase = document.getElementById('gallery-phase');
+    const proposalPhase = document.getElementById('proposal-phase');
+
+    const passwordInput = document.getElementById('password-input');
+    const loginBtn = document.getElementById('login-btn');
+    const loginError = document.getElementById('login-error');
+
+    // --- STATE ---
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.story-slide');
+
+    // --- LOGIN LOGIC ---
+    loginBtn.addEventListener('click', () => {
+      if (passwordInput.value === SECRET_Pass) {
+        switchPhase(loginPhase, storyPhase);
+        createHeart();
+      } else {
+        loginError.style.display = 'block';
+        passwordInput.value = '';
+      }
+    });
+
+    // --- PHASE TRANSITION HELPER ---
+    function switchPhase(current, next) {
+      current.classList.add('fade-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fade-out');
+
+        next.classList.remove('hidden');
+        next.classList.add('fade-in');
+      }, 500); // 0.5s duration
+    }
+
+    // --- STORY LOGIC ---
+    function nextSlide() {
+      slides[currentSlide].classList.remove('active');
+      currentSlide++;
+      if (currentSlide < slides.length) {
+        slides[currentSlide].classList.add('active');
+        slides[currentSlide].style.animation = 'slideIn 0.5s ease';
+      }
+    }
+
+    // --- VIDEO MODAL LOGIC ---
+    const videoModal = document.getElementById('video-modal');
+    const memoryVideo = document.getElementById('memory-video');
+
+    function openVideoModal() {
+      videoModal.style.display = 'flex';
+      setTimeout(() => {
+        videoModal.classList.add('show');
+      }, 10); // Small delay to allow display:flex to apply before opacity transition
+      memoryVideo.play();
+    }
+
+    function closeVideoModal() {
+      videoModal.classList.remove('show');
+      setTimeout(() => {
+        videoModal.style.display = 'none';
+      }, 300); // Wait for transition
+      memoryVideo.pause();
+      memoryVideo.currentTime = 0;
+    }
+
+    function goToGallery() {
+      switchPhase(storyPhase, galleryPhase);
+    }
+
+    function goToProposal() {
+      switchPhase(galleryPhase, proposalPhase);
+    }
+
+    // --- PROPOSAL LOGIC (Existing) ---
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
-    const card = document.querySelector(".card");
     const hoverSound = document.getElementById("hoverSound");
     const yesSound = document.getElementById("yesSound");
 
     noBtn.addEventListener("mouseenter", () => {
       hoverSound.currentTime = 0;
       hoverSound.play();
-
+      const card = document.querySelector(".card");
       const cardRect = card.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
 
-      const maxX = cardRect.width - btnRect.width - 10;
-      const maxY = cardRect.height - btnRect.height - 10;
+      // Calculate safe area (so it doesn't go off card)
+      // Note: card is relative, button absolute.
+      // Card padding: 40px top, 45px bottom, 30px side.
+      // We need to keep button within card bounds roughly.
+
+      const maxX = cardRect.width - btnRect.width - 20;
+      const maxY = cardRect.height - btnRect.height - 20;
 
       noBtn.style.left = Math.random() * maxX + "px";
       noBtn.style.top = Math.random() * maxY + "px";
@@ -208,17 +1105,23 @@
     yesBtn.addEventListener("click", () => {
       yesSound.play();
 
-      confetti({
-        particleCount: 260,
-        spread: 120,
-        origin: { y: 0.65 }
-      });
+      // Massive Confetti Burst
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+      setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } }), 500);
+      setTimeout(() => confetti({ particleCount: 150, spread: 120, origin: { y: 0.6 } }), 1000);
 
-      setTimeout(() => {
-        alert("YAY 💕 I can’t wait for Valentine’s Day with you!");
-      }, 500);
+      // Hide proposal elements
+      document.querySelector('.proposal-text').style.display = 'none';
+      document.querySelector('.buttons').style.display = 'none';
+      document.querySelector('.hint').style.display = 'none';
+      document.querySelector('.card .emoji').style.display = 'none';
+
+      // Show success message
+      const successMsg = document.querySelector('.success-message');
+      successMsg.style.display = 'flex';
     });
 
+    // --- BACKGROUND HEARTS ---
     function createHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -227,13 +1130,12 @@
       heart.style.fontSize = Math.random() * 22 + 14 + "px";
       heart.style.animationDuration = Math.random() * 3 + 4 + "s";
       heart.style.opacity = Math.random() * 0.5 + 0.4;
-
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 8000);
     }
-
-    setInterval(createHeart, 380);
+    // Start some hearts immediately
+    setInterval(createHeart, 600);
   </script>
-
 </body>
+
 </html>
